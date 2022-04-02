@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Buku;
 use App\Models\KategoriBuku;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Admin\KategoriBukuController;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -94,9 +96,10 @@ class BukuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Buku $buku)
     {
-        //
+        $kategoriBuku = DB::table('categories')->pluck('id','category');
+        return view('admin.buku.buku.edit', compact('buku', 'kategoriBuku'));
     }
 
     /**
@@ -106,9 +109,58 @@ class BukuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Buku $buku)
     {
-        //
+        $request->validate([
+            'category_id' => 'required',
+            'title' => 'required',
+            'author' => 'required',
+            'year' => 'required',
+            'condition' => 'required',
+            'quantity' => 'required',
+            'photo' => 'image|mimes:jpg,png,jpeg|max:2048',
+            'description' => 'required'
+        ]);
+
+
+        $slug = Str::slug($request->title);
+
+        $post = Buku::findOrFail($buku->id);
+
+        if ($request->file('photo') == "") {
+            $post->update([
+                'category_id' => $request->category_id,
+                'title' => $request->title,
+                'author' => $request->author,
+                'year' => $request->year,
+                'condition' => $request->condition,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+                'slug' => $slug
+            ]);
+        }else{
+            Storage::disk('local')->delete($buku->photo);
+            $photo = $request->file('photo')->store('public/buku');
+            $post->update([
+                'category_id' => $request->category_id,
+                'title' => $request->title,
+                'author' => $request->author,
+                'year' => $request->year,
+                'condition' => $request->condition,
+                'quantity' => $request->quantity,
+                'photo' => $photo,
+                'description' => $request->description,
+                'slug' => $slug
+            ]);
+        }
+
+        if($post){
+        //redirect dengan pesan sukses
+            return redirect()->route('buku.index')->with(['success' => 'Data Berhasil Disunting!']);
+        }else{
+        //redirect dengan pesan error
+            return redirect()->route('buku.index')->with(['error' => 'Data Gagal Disunting!']);
+        }
     }
 
     /**
@@ -117,8 +169,19 @@ class BukuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Buku $buku)
     {
-        //
+        $post = Buku::findOrFail($buku->id);
+        Storage::disk('local')->delete($buku->photo);
+        $post->delete();
+        
+        if($post){
+        //redirect dengan pesan sukses
+            return redirect()->route('buku.index')->with(['success' => 'Data Berhasil Dihapus!']);
+        }else{
+        //redirect dengan pesan error
+            return redirect()->route('buku.index')->with(['error' => 'Data Gagal Dihapus!']);
+        }
+
     }
 }

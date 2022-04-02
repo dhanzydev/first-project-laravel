@@ -22,10 +22,6 @@ Sunting Kategori Buku
                     <label for="category">Nama Kategori</label>
                     <input type="text" class="form-control" id="kategori" value="{{ old('category', $kategori->category) }}" name="category" placeholder="Masukkan Kategori Buku">
                 </div>
-                <div class="form-group">
-                    <label for="category">Deskripsi</label>
-                    <textarea type="text" class="form-control" style="height: 200px" id="kategori" name="description">{{ old('category', $kategori->description) }}</textarea>
-                </div>
                 <button type="submit" class="btn btn-primary mr-2">Simpan</button>
                 <button type="reset" class="btn btn-warning">Reset</button>
                 <a href="{{ route('kategori.index') }}" class="btn btn-danger">Kembali</a>

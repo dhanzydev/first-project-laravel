@@ -25,15 +25,10 @@ Kategori Buku
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <div class="card-title">
-                <h4>Daftar Kategori Buku</h4>
-                <div class="text-right">
-                    <a href="{{ route('kategori.create') }}" class="btn btn-primary btn-icon-text">
-                        <i class="mdi mdi-plus btn-icon-prepend"></i>
-                        Tambah Kategori
-                    </a>
-                </div>
-            </div>
+            <a href="{{ route('kategori.create') }}" class="btn btn-primary btn-icon-text mb-3">
+                <i class="mdi mdi-plus btn-icon-prepend"></i>
+                Tambah Kategori
+            </a>
             <div class="table-responsive">
                 <table class="table table-striped" id="kategori">
                     <thead>
@@ -41,7 +36,6 @@ Kategori Buku
                             <th>#</th>
                             <th>Kategori</th>
                             <th>Slug</th>
-                            <th>Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -51,10 +45,11 @@ Kategori Buku
                             <td>{{ $k+1 }}</td>
                             <td>{{ $data->category }}</td>
                             <td>{{ $data->slug }}</td>
-                            <td>{{ $data->description }}</td>
                             <td>
-                                <form onsubmit="return confirm('Apakah anda yakin ingin mengahpus data?')" action="{{ route('kategori.destroy',$data->id) }}" method="post">
-                                    <a href="{{ route('kategori.edit',$data->id) }}" class="btn btn-warning btn-icon-text py-3">
+                                <form onsubmit="return confirm('Apakah anda yakin ingin mengahpus data?')"
+                                    action="{{ route('kategori.destroy',$data->id) }}" method="post">
+                                    <a href="{{ route('kategori.edit',$data->id) }}"
+                                        class="btn btn-warning btn-icon-text py-3">
                                         <i class="mdi mdi-border-color btn-icon-prepend"></i>
                                         Sunting
                                     </a>
@@ -79,7 +74,11 @@ Kategori Buku
 @push('addon-script')
 <script>
     $(document).ready(function () {
-        $('#kategori').DataTable();
+        $('#kategori').DataTable({
+            "sScrollX": "100%",
+            "sScrollXInner": "110%",
+            "bScrollCollapse": true
+        });
     });
 
 </script>

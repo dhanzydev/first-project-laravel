@@ -38,18 +38,19 @@ class KategoriBukuController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
 
         $request->validate([
-            'category' => 'required',
-            'description' => 'required',
+            'category' => 'required'
         ]);
 
-        $data['slug'] = Str::slug($request->category);
+        $slug = Str::slug($request->category);
 
-        KategoriBuku::create($data);
+        $post = KategoriBuku::create([
+            'category' => $request->category,
+            'slug' => $slug
+        ]);
 
-        if($data){
+        if($post){
         //redirect dengan pesan sukses
             return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Disimpan!']);
         }else{
@@ -92,8 +93,7 @@ class KategoriBukuController extends Controller
     {
 
         $request->validate([
-            'category' => 'required',
-            'description' => 'required',
+            'category' => 'required'
         ]);
 
         $post = KategoriBuku::findOrFail($kategori->id);
@@ -103,7 +103,6 @@ class KategoriBukuController extends Controller
         $post->update([
             'category' => $request->category,
             'slug' => $slug,
-            'description' => $request->description
         ]);
 
         if($post){

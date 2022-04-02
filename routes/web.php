@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriBukuController;
 use App\Http\Controllers\Admin\BukuController;
+use App\Http\Controllers\DetailBukuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::get('/', function () {
 Route::get('admin/dashboard', [DashboardController::class, 'index']);
 Route::resource('admin/kategori', KategoriBukuController::class);
 Route::resource('admin/buku', BukuController::class);
+Route::get('/detail-buku/{id}/{kategori:slug}/{buku:slug}', [DetailBukuController::class, 'index']);
 
 
 

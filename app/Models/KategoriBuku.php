@@ -10,7 +10,7 @@ class KategoriBuku extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category','slug','description'
+        'category','slug',
     ];
 
     protected $table = 'categories';
